@@ -1,0 +1,54 @@
+﻿@page
+@model AnualModel
+
+<h2>Gastos por año</h2>
+
+<form method="get">
+    <label>Año:</label>
+    <select name="year" onchange="this.form.submit()">
+        @for (int y = DateTime.Now.Year - 5; y <= DateTime.Now.Year + 1; y++)
+        {
+            <option value="@y" selected="@(y == Model.Year)">
+                @y
+            </option>
+        }
+    </select>
+</form>
+
+<canvas id="stackedChart" width="900" height="400"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const labels = @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(Model.Meses)
+        );
+
+    const dataPorSuscripcion = @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(Model.DatosPorSuscripcion)
+        );
+
+    const datasets = [];
+
+    Object.keys(dataPorSuscripcion).forEach(sub => {
+        datasets.push({
+            label: sub,
+            data: dataPorSuscripcion[sub]
+        });
+    });
+
+    new Chart(document.getElementById('stackedChart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: { stacked: true },
+                y: { stacked: true, beginAtZero: true }
+            }
+        }
+    });
+</script>

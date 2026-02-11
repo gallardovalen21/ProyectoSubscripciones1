@@ -1,0 +1,48 @@
+﻿@page
+@model MensualModel
+
+<h2>Gastos de @Model.MesNombre</h2>
+
+<div style="max-width: 280px; margin: 0 auto;">
+    <a asp-page="Mensual"
+       asp-route-year="@Model.PrevYear"
+       asp-route-month="@Model.PrevMonth">⬅</a>
+
+    <strong>Total del mes: $ @Model.TotalMes.ToString("N2")</strong>
+
+    <a asp-page="Mensual"
+       asp-route-year="@Model.NextYear"
+       asp-route-month="@Model.NextMonth">➡</a>
+</div>
+
+<br />
+
+<div style="max-width: 580px; margin: 0 auto;">
+    <canvas id="pieChart"></canvas>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const labels = @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(Model.Labels)
+        );
+
+    const values = @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(Model.Values)
+        );
+
+    new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+</script>

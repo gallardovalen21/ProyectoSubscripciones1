@@ -1,0 +1,145 @@
+﻿@page
+@model proyecto.Pages.AgregarSubModel
+@{
+    ViewData["Title"] = "Nueva Suscripción";
+}
+
+<div class="min-h-screen bg-gray-50 py-10 px-4">
+    <div class="max-w-2xl mx-auto">
+
+        @* Encabezado *@
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Agregar Suscripción</h1>
+            <p class="text-gray-500">Ingresa los detalles de tu nuevo pago recurrente.</p>
+        </div>
+
+        <form method="post" class="bg-white shadow-sm border border-gray-200 rounded-2xl p-8 space-y-6">
+
+            @* Nombre del Servicio *@
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre del Servicio</label>
+                <input asp-for="NewSubscription.ServiceName" id="serviceInput" list="scrapedServices"
+                       placeholder="Escribí o seleccioná un servicio..."
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none transition" />
+
+                <datalist id="scrapedServices">
+                    @* Aquí se llenarán las opciones mediante JavaScript *@
+                </datalist>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @* Monto *@
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Monto</label>
+                    <input asp-for="NewSubscription.Amount" type="number" step="0.01"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none" />
+                </div>
+
+                @* Moneda *@
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Moneda</label>
+                    <select asp-for="NewSubscription.Currency" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
+                        <option value="ARS">Peso Argentino (ARS)</option>
+                        <option value="USD">Dólar (USD)</option>
+                        <option value="EUR">Euro (EUR)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @* Ciclo de Facturación *@
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Ciclo de Facturación</label>
+                    <select asp-for="NewSubscription.BillingCycle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
+                        <option value="Mensual">Mensual</option>
+                        <option value="Trimestral">Trimestral</option>
+                        <option value="Anual">Anual</option>
+                    </select>
+                </div>
+
+                @* Próximo Pago *@
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Próximo Pago</label>
+                    <input asp-for="NewSubscription.NextBillingDate" type="date"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none" />
+                </div>
+
+                @* Recordatorio (Días antes) *@
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Notificarme</label>
+                    <select asp-for="NewSubscription.Recordatorio"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none">
+                        <option value="1">1 día antes</option>
+                        <option value="3">3 días antes</option>
+                        <option value="7">7 días antes</option>
+                    </select>
+                    <p class="text-xs text-gray-400 mt-1">Días de antelación para el aviso.</p>
+                </div>
+            </div>
+
+            @* Opciones Booleanas *@
+            <div class="flex flex-col gap-4 p-4 bg-gray-50 rounded-xl">
+                <label class="flex items-center gap-3 cursor-pointer">
+                    <input asp-for="NewSubscription.AutoPayment" type="checkbox" class="w-5 h-5 text-green-600 rounded border-gray-300" />
+                    <span class="text-sm font-medium text-gray-700">Habilitar Pago Automático</span>
+                </label>
+
+                <label class="flex items-center gap-3 cursor-pointer">
+                    <input asp-for="NewSubscription.IsTrial" type="checkbox" class="w-5 h-5 text-green-600 rounded border-gray-300" />
+                    <span class="text-sm font-medium text-gray-700">Es un periodo de prueba</span>
+                </label>
+            </div>
+
+            @* Botones de Acción *@
+            <div class="flex items-center justify-end gap-4 pt-4 border-t border-gray-100">
+                <a asp-page="Index" class="px-6 py-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition">
+                    Cancelar
+                </a>
+                <button type="submit" class="px-6 py-2 bg-green-600 text-white text-sm font-bold rounded-lg hover:bg-green-700 shadow-md transition-all">
+                    Guardar Suscripción
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        // 1. Recibimos el JSON del servidor
+        const rawData = @Html.Raw(Model.ScrapedPricesJson ?? "{}");
+        console.log("Estructura recibida:", rawData); // Esto te permite ver el error en F12
+
+        const prices = rawData.data || {};
+        const datalist = document.getElementById('scrapedServices');
+        const serviceInput = document.getElementById('serviceInput');
+
+        // 2. POBLAR EL DATALIST (Iterando por categorías)
+        // prices es un objeto que tiene { netflix: [...], youtube_premium: [...] }
+        Object.keys(prices).forEach(category => {
+            const listadoDePlanes = prices[category];
+
+            listadoDePlanes.forEach(item => {
+                const option = document.createElement('option');
+                option.value = item.servicio; // Aquí saldrá "Netflix Básico" con tildes corregidas
+                datalist.appendChild(option);
+            });
+        });
+
+        // 3. AUTOCOMPLETADO
+        serviceInput.addEventListener('input', function() {
+            const selectedValue = this.value;
+            let foundPlan = null;
+
+            // Buscamos en todas las categorías
+            Object.values(prices).forEach(categoryList => {
+                const match = categoryList.find(p => p.servicio === selectedValue);
+                if(match) foundPlan = match;
+            });
+
+            if (foundPlan) {
+                document.querySelector('[name="NewSubscription.Amount"]').value = foundPlan.precio_final_ars;
+                document.querySelector('[name="NewSubscription.Currency"]').value = "ARS";
+                document.querySelector('[name="NewSubscription.AutoPayment"]').checked = true;
+            }
+        });
+    </script>
+}

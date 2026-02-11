@@ -1,0 +1,114 @@
+﻿@page "{id:int}"
+@model proyecto.Pages.EditarSubModel
+@{
+    ViewData["Title"] = "Editar Detalles";
+}
+
+<div class="min-h-screen bg-slate-50 py-12 px-4">
+    <div class="max-w-4xl mx-auto">
+        <form method="post" class="bg-white shadow-2xl rounded-[2.5rem] p-10 border border-slate-100">
+
+            @* --- EL ID SE MANTIENE OCULTO (Seguridad e Integridad) --- *@
+            <input type="hidden" asp-for="SubscriptionToEdit.Id" />
+
+            <div class="mb-10 flex items-center justify-between">
+                <div>
+                    <h2 class="text-3xl font-black text-slate-800 tracking-tight">Editar Suscripción</h2>
+                    <p class="text-slate-500 font-medium">@Model.SubscriptionToEdit.ServiceName</p>
+                </div>
+                <div class="h-12 w-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold">
+                    @Model.SubscriptionToEdit.ServiceName?.Substring(0, 1).ToUpper()
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                @* 1. Nombre *@
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Service Name</label>
+                    <input asp-for="SubscriptionToEdit.ServiceName" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 outline-none font-bold" />
+                </div>
+
+                @* 2 y 3. Monto y Moneda *@
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Amount</label>
+                    <input asp-for="SubscriptionToEdit.Amount" type="number" step="0.01" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl font-mono font-bold text-indigo-600 text-lg" />
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Currency</label>
+                    <select asp-for="SubscriptionToEdit.Currency" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl font-semibold">
+                        <option value="ARS">ARS - Pesos Argentinos</option>
+                        <option value="USD">USD - Dólares</option>
+                    </select>
+                </div>
+
+                @* 4 y 5. Ciclo y Categoría *@
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Billing Cycle</label>
+                    <select asp-for="SubscriptionToEdit.BillingCycle" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl font-semibold">
+                        <option value="Mensual">Mensual</option>
+                        <option value="Bimestral">Bimestral</option>
+                        <option value="Trimestral">Trimestral</option>
+                        <option value="Cuatrimestral">Cuatrimestral</option>
+                        <option value="Semestral">Semestral</option>
+                        <option value="Anual">Anual</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Category</label>
+                    <input asp-for="SubscriptionToEdit.Category" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl font-medium" placeholder="Streaming, Software, etc." />
+                </div>
+
+                @* 6 y 7. Fecha y Recordatorio *@
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Next Billing Date</label>
+                    <input asp-for="SubscriptionToEdit.NextBillingDate" type="date" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl font-semibold" />
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Reminder Days (Días antes)</label>
+                    <input asp-for="SubscriptionToEdit.Recordatorio" type="number" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl font-bold text-slate-600" />
+                </div>
+
+                @* 8. Periodo (texto con formato numérico como 01-02 o 01/03) *@
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Periodo (ej. 01-02 o 01/03)</label>
+                    <input asp-for="SubscriptionToEdit.Periodo" type="text" pattern="^[0-9]{2}[-/][0-9]{2}$" placeholder="01-02" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl font-medium" />
+                </div>
+
+                @* 9. Descripción libre *@
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Descripción</label>
+                    <textarea asp-for="SubscriptionToEdit.Description" rows="4" class="w-full px-5 py-4 bg-slate-50 border rounded-2xl font-medium" placeholder="Agrega notas o detalles de la suscripción..."></textarea>
+                </div>
+
+                @* --- Atributos Booleanos y Status --- *@
+                <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-50 p-6 rounded-3xl border border-slate-100 mt-2">
+                    <div class="flex items-center gap-3">
+                        <input asp-for="SubscriptionToEdit.IsTrial" type="checkbox" class="w-6 h-6 rounded-lg text-indigo-600 border-slate-300 focus:ring-indigo-500" />
+                        <span class="text-sm font-bold text-slate-700">Is Trial?</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input asp-for="SubscriptionToEdit.AutoPayment" type="checkbox" class="w-6 h-6 rounded-lg text-indigo-600 border-slate-300 focus:ring-indigo-500" />
+                        <span class="text-sm font-bold text-slate-700">Auto Payment</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <label class="text-xs font-black text-slate-400 uppercase mr-2">Status:</label>
+                        <select asp-for="SubscriptionToEdit.Status" class="bg-transparent font-bold text-indigo-600 focus:outline-none cursor-pointer">
+                            <option value="Activa">Activa</option>
+                            <option value="Inactiva">Inactiva</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-10 flex items-center justify-between border-t border-slate-100">
+                <a asp-page="Index" class="text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors italic">
+                    &larr; Back to Dashboard
+                </a>
+                <button type="submit" class="bg-indigo-600 text-white px-12 py-4 rounded-2xl font-bold shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-95">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

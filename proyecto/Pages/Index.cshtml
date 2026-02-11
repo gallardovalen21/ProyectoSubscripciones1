@@ -1,0 +1,113 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Mis Finanzas";
+}
+
+<div class="min-h-screen bg-slate-50 pb-12">
+    @* --- NAVBAR / HEADER --- *@
+    <nav class="bg-white border-b border-slate-200 mb-8">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <h1 class="text-xl font-bold text-slate-800 tracking-tight underline decoration-green-500 decoration-4">proyecto.</h1>
+            <a asp-page="/AgregarSub" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-sm">
+                + Nueva Suscripción
+            </a>
+        </div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto px-4">
+        @* --- TARJETAS DE RESUMEN --- *@
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <p class="text-xs font-bold text-slate-400 uppercase mb-1">Gasto Mensual</p>
+                <h3 class="text-3xl font-black text-slate-800">@Model.TotalMonthly.ToString("C0")</h3>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <p class="text-xs font-bold text-slate-400 uppercase mb-1">Gasto Anual</p>
+                <h3 class="text-3xl font-black text-green-600">@Model.TotalYearly.ToString("C0")</h3>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <p class="text-xs font-bold text-slate-400 uppercase mb-1">Suscripciones</p>
+
+
+         
+                <h3 class="text-3xl font-black text-slate-800">@Model.Subscriptions.Count</h3>
+            </div>
+        </div>
+
+        @* --- LISTADO --- *@
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+            <div class="p-6 border-b border-slate-50">
+                <h2 class="text-lg font-bold text-slate-800">Tus Suscripciones</h2>
+            </div>
+
+            <div class="divide-y divide-slate-100">
+                @foreach (var sub in Model.Subscriptions)
+                {
+                    <div class="p-6 flex flex-col md:flex-row md:items-center justify-between hover:bg-slate-50/50 transition-colors">
+                        <div class="flex items-center gap-5 mb-4 md:mb-0">
+                            @* Avatar dinámico *@
+                            <div class="w-14 h-14 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center text-xl font-black">
+                                @sub.ServiceName.Substring(0, 1).ToUpper()
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-bold text-slate-900">@sub.ServiceName</h4>
+                                <div class="flex flex-wrap gap-2 mt-1">
+                                    <span class="text-sm font-medium text-slate-500">@sub.Currency @sub.Amount.ToString("N2")</span>
+                                    <span class="text-slate-300">•</span>
+                                    <span class="text-sm font-medium text-slate-500">@sub.BillingCycle</span>
+                                    <span class="text-slate-300">•</span>
+                                    <span class="text-sm font-bold text-indigo-600">Próximo: @sub.NextBillingDate.ToShortDateString()</span>
+                                </div>
+                            </div>
+                        </div>
+                            
+                            @* --- Botonera de Acciones --- *@
+                            <div class="flex items-center gap-3">
+
+                            @* Si NO es pago automático, mostramos los controles manuales *@
+                            @if (sub.AutoPayment == false)
+                            {
+                                @* Botón Deshacer (con tu lógica de JustPaidId) *@
+                                if (Model.JustPaidId == sub.Id)
+                                {
+                                        <form method="post" asp-page-handler="Undo" asp-route-id="@sub.Id">
+                                            <button type="submit" class="text-xs font-bold text-orange-500 bg-orange-50 px-3 py-2 rounded-xl transition-all">
+                                                ↩ Deshacer
+                                            </button>
+                                        </form>
+                                }
+
+                                @* Botón Pagar Manual *@
+                                    <form method="post" asp-page-handler="Pay" asp-route-id="@sub.Id">
+                                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-2 rounded-xl text-sm shadow-md transition-all">
+                                            Pagar
+                                        </button>
+                                    </form>
+                            }
+                            else
+                            {
+                                @* Badge visual de que es automático *@
+                                    <span class="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-indigo-400 bg-indigo-50 px-3 py-2 rounded-xl border border-indigo-100">
+                                        <span class="animate-pulse">●</span> Automático
+                                    </span>
+                            }
+
+                            @* Editar y Borrar siempre visibles *@
+                                <div class="flex gap-1 ml-2 border-l pl-3 border-slate-200">
+                                    <a asp-page="/EditarSub" asp-route-id="@sub.Id" class="p-2 text-slate-400 hover:text-indigo-600 transition-colors">📝</a>
+                                @* ... botón borrar ... *@
+                                </div>
+                            </div>
+                                
+                                <form method="post" asp-page-handler="Delete" asp-route-id="@sub.Id" onsubmit="return confirm('¿Eliminar?');">
+                                    <button type="submit" class="p-2 text-slate-400 hover:text-red-600 transition-colors">🗑️</button>
+                                </form>
+                            </div>
+                      
+                   
+                }
+            </div>
+        </div>
+    </div>
+</div>

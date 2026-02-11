@@ -1,0 +1,64 @@
+{
+  "data": {
+    "netflix": [
+      {
+        "servicio": "Netflix Básico",
+        "precio_final_ars": 15000,
+        "precio_base_ars": 8999
+      },
+      {
+        "servicio": "Netflix Estándar",
+        "precio_final_ars": 22948,
+        "precio_base_ars": 14999
+      },
+      {
+        "servicio": "Netflix Estándar 1 miembro extra",
+        "precio_final_ars": 31209,
+        "precio_base_ars": 20398
+      },
+      {
+        "servicio": "Netflix Premium",
+        "precio_final_ars": 30598,
+        "precio_base_ars": 19999
+      },
+      {
+        "servicio": "Netflix Premium + 1 miembro extra",
+        "precio_final_ars": 38859,
+        "precio_base_ars": 25398
+      },
+      {
+        "servicio": "Netflix Premium + 2 miembros extra",
+        "precio_final_ars": 47119,
+        "precio_base_ars": 30797
+      },
+      {
+        "servicio": "Netflix 1 miembro extra",
+        "precio_final_ars": 8260,
+        "precio_base_ars": 5399
+      },
+      {
+        "servicio": "Netflix 2 miembros extra",
+        "precio_final_ars": 16521,
+        "precio_base_ars": 10798
+      }
+    ],
+    "youtube_premium": [
+      {
+        "servicio": "YouTube Premium Lite",
+        "precio_final_ars": 3364,
+        "precio_base_ars": 2199
+      },
+      {
+        "servicio": "YouTube Premium Individual",
+        "precio_final_ars": 5200,
+        "precio_base_ars": 3399
+      },
+      {
+        "servicio": "YouTube Premium Familiar",
+        "precio_final_ars": 10402,
+        "precio_base_ars": 6799
+      }
+    ]
+  },
+  "updated_at": "2025-12-28T13:02:31.287368"
+}
