@@ -15,7 +15,6 @@ namespace Clasess
         public decimal Amount { get; set; }
         public int? SubscriptionId { get; set; }
 
-        // Navigation property to Subscription
         public Subscription? Subscription { get; set; }
     }
 }

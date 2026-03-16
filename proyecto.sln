@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "proyecto", "proyecto\proyec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clasess", "Clasess\Clasess.csproj", "{9999CED8-B7BA-496E-85E9-F88950101DBB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{83CA48A9-C9EE-4384-AA77-AC9F79638615}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clasess.Tests", "tests\Clasess.Tests\Clasess.Tests.csproj", "{21BE4B95-B2A6-4AD4-AA62-78A9B8C5827B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,11 +25,18 @@ Global
 		{9999CED8-B7BA-496E-85E9-F88950101DBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9999CED8-B7BA-496E-85E9-F88950101DBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9999CED8-B7BA-496E-85E9-F88950101DBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21BE4B95-B2A6-4AD4-AA62-78A9B8C5827B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21BE4B95-B2A6-4AD4-AA62-78A9B8C5827B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21BE4B95-B2A6-4AD4-AA62-78A9B8C5827B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21BE4B95-B2A6-4AD4-AA62-78A9B8C5827B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {88C12D8E-693F-4610-A63B-D6B23F3A5B04}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{21BE4B95-B2A6-4AD4-AA62-78A9B8C5827B} = {83CA48A9-C9EE-4384-AA77-AC9F79638615}
 	EndGlobalSection
 EndGlobal
