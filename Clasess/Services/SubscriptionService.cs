@@ -17,11 +17,26 @@ namespace Clasess.Services
             _db = sub;
             
         }
+        
+        public List<House> GetAllHouses()
+        {
+            return _db.Houses.ToList();
+        }
         public Subscription AddSubscription(Subscription subscription)
         {
             if (subscription == null)
             {
                 throw new ArgumentNullException(nameof(subscription));
+            }
+
+            // Ensure HouseId points to an existing house (or null)
+            if (subscription.HouseId != null)
+            {
+                var houseExists = _db.Houses.Any(h => h.Id == subscription.HouseId);
+                if (!houseExists)
+                {
+                    subscription.HouseId = null;
+                }
             }
 
             _db.Subscriptions.Add(subscription);
@@ -44,13 +59,17 @@ namespace Clasess.Services
                 existingSub.IsTrial = sub.IsTrial;
                 existingSub.AutoPayment = sub.AutoPayment;
                 existingSub.Recordatorio = sub.Recordatorio;
+                // new fields
+                existingSub.Description = sub.Description;
+                existingSub.Periodo = sub.Periodo;
+                existingSub.HouseId = sub.HouseId;
                 _db.SaveChanges();
             }
         }
 
         public Subscription? GetSubscriptionByID(int id)
         {
-            return _db.Subscriptions.FirstOrDefault(s => s.Id == id);
+            return _db.Subscriptions.Include(s => s.Payments).Include(s => s.House).FirstOrDefault(s => s.Id == id);
         }
 
 
@@ -107,6 +126,7 @@ namespace Clasess.Services
             // Usamos .Include para que la propiedad "Payments" no sea null
             return _db.Subscriptions
                        .Include(s => s.Payments)
+                       .Include(s => s.House)
                        .ToList();
         }
 

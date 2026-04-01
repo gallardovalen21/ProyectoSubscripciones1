@@ -21,6 +21,11 @@ namespace proyecto.Pages
         [BindProperty(SupportsGet = true)]
         public int Month { get; set; } = DateTime.Now.Month;
 
+        [BindProperty(SupportsGet = true)]
+        public int? HouseId { get; set; }
+
+        public List<House> Houses { get; set; } = new();
+
         public string MesNombre =>
             new DateTime(Year, Month, 1)
                 .ToString("MMMM yyyy", new CultureInfo("es-ES"));
@@ -38,10 +43,19 @@ namespace proyecto.Pages
 
         public async Task OnGet()
         {
-            var pagos = await _context.Payments
+            Houses = _context.Houses.ToList();
+
+            var pagosQuery = _context.Payments
                 .Include(p => p.Subscription)
                 .Where(p => p.Date.Year == Year && p.Date.Month == Month)
-                .ToListAsync();
+                .AsQueryable();
+
+            if (HouseId != null)
+            {
+                pagosQuery = pagosQuery.Where(p => p.Subscription != null && p.Subscription.HouseId == HouseId);
+            }
+
+            var pagos = await pagosQuery.ToListAsync();
 
             var agrupado = pagos
                 .GroupBy(p => p.Subscription!.ServiceName)

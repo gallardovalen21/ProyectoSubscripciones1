@@ -3,14 +3,21 @@
 
 <h2>Gastos por año</h2>
 
-<form method="get">
+<form method="get" class="mb-4">
     <label>Año:</label>
     <select name="year" onchange="this.form.submit()">
         @for (int y = DateTime.Now.Year - 5; y <= DateTime.Now.Year + 1; y++)
         {
-            <option value="@y" selected="@(y == Model.Year)">
-                @y
-            </option>
+            <option value="@y" selected="@(y == Model.Year)">@y</option>
+        }
+    </select>
+
+    <label class="ml-4">Casa:</label>
+    <select name="houseId" onchange="this.form.submit()">
+        <option value="" selected="@(Model.HouseId == null)">Todas</option>
+        @foreach (var h in Model.Houses)
+        {
+            <option value="@h.Id" selected="@(Model.HouseId == h.Id)">@h.Name</option>
         }
     </select>
 </form>

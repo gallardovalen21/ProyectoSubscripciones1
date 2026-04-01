@@ -11,6 +11,7 @@ namespace Clasess
     {
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<House> Houses { get; set; }
 
         public SubDbContext(DbContextOptions<SubDbContext> options)
             : base(options)
@@ -33,6 +34,11 @@ namespace Clasess
                 entity.ToTable("Subscriptions");
                 entity.Property(s => s.Amount)
                       .HasPrecision(18, 2);
+                // Relationship Subscription -> House
+                entity.HasOne(s => s.House)
+                      .WithMany(h => h.Subscriptions)
+                      .HasForeignKey(s => s.HouseId)
+                      .OnDelete(DeleteBehavior.SetNull);
             });
         }
     }

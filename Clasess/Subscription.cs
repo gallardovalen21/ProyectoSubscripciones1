@@ -27,6 +27,10 @@ namespace Clasess
         [JsonPropertyName("periodo")] public string? Periodo { get; set; }
 
         public List<Payment> Payments { get; set; } = new();
+        
+        // House association
+        public int? HouseId { get; set; }
+        public House? House { get; set; }
 
     }
 

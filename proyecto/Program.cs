@@ -24,9 +24,6 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<SubDbContext>();
 
-    Console.WriteLine($"Base de datos en: {db.Database.GetDbConnection().DataSource}");
-
-
     db.Database.Migrate();
 }
 

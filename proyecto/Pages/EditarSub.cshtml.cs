@@ -14,6 +14,8 @@ namespace proyecto.Pages
         [BindProperty]
         public Subscription SubscriptionToEdit { get; set; } = new();
 
+        public List<House> Houses { get; set; } = new();
+
         public IActionResult OnGet(int id)
         {
             // Buscamos la suscripción real en la DB
@@ -22,12 +24,17 @@ namespace proyecto.Pages
             if (sub == null) return RedirectToPage("Index");
 
             SubscriptionToEdit = sub;
+            Houses = _service.GetAllHouses();
             return Page();
         }
 
         public IActionResult OnPost()
         {
-            if (!ModelState.IsValid) return Page();
+            if (!ModelState.IsValid)
+            {
+                Houses = _service.GetAllHouses();
+                return Page();
+            }
 
             _service.UpdateSubscription(SubscriptionToEdit);
             return RedirectToPage("Index");

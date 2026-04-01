@@ -3,6 +3,7 @@ using System;
 using Clasess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Clasess.Migrations
 {
     [DbContext(typeof(SubDbContext))]
-    partial class SubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260401225549_AddHouseAndSubscriptionHouseId1")]
+    partial class AddHouseAndSubscriptionHouseId1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.22");

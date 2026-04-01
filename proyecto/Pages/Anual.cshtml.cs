@@ -17,6 +17,10 @@ namespace proyecto.Pages
 
         [BindProperty(SupportsGet = true)]
         public int Year { get; set; } = DateTime.Now.Year;
+        [BindProperty(SupportsGet = true)]
+        public int? HouseId { get; set; }
+
+        public List<House> Houses { get; set; } = new();
 
         public List<string> Meses { get; set; } = new();
         public Dictionary<string, List<decimal>> DatosPorSuscripcion { get; set; } = new();
@@ -24,10 +28,19 @@ namespace proyecto.Pages
         public async Task OnGet()
         {
            
-            var pagos = await _context.Payments
+            Houses = _context.Houses.ToList();
+
+            var pagosQuery = _context.Payments
                 .Include(p => p.Subscription)
                 .Where(p => p.Date.Year == Year)
-                .ToListAsync();
+                .AsQueryable();
+
+            if (HouseId != null)
+            {
+                pagosQuery = pagosQuery.Where(p => p.Subscription != null && p.Subscription.HouseId == HouseId);
+            }
+
+            var pagos = await pagosQuery.ToListAsync();
 
             
             var datos = pagos

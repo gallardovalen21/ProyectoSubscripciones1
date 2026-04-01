@@ -34,6 +34,10 @@ namespace proyecto.Pages
         public decimal TotalMonthly { get; set; }
         public decimal TotalYearly { get; set; }
 
+        public List<House> Houses { get; set; } = new();
+        [BindProperty(SupportsGet = true)]
+        public int? SelectedHouseId { get; set; }
+
         public int? JustPaidId { get; set; }
         public void OnGet()
         {
@@ -44,11 +48,24 @@ namespace proyecto.Pages
 
             _service.ProcessAutoPayments();
 
+            Houses = _service.GetAllHouses();
+
+            // Accept older query key "houseId" as well as the bound SelectedHouseId
+            if (SelectedHouseId == null)
+            {
+                var q = Request.Query["houseId"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(q) && int.TryParse(q, out var parsed))
+                {
+                    SelectedHouseId = parsed;
+                }
+            }
+
             var allSubscriptions = _service.GetAllSubscriptionWithPayments()
                 ?? new List<Subscription>();
 
             Subscriptions = allSubscriptions
                 .Where(s => s.Status == "Activa")
+                .Where(s => SelectedHouseId == null || s.HouseId == SelectedHouseId)
                 .ToList();
 
             var now = DateTime.Now;

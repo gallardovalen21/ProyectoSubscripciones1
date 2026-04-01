@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
             }
             [BindProperty]
             public Subscription NewSubscription { get; set; } = new();
+
+        public List<House> Houses { get; set; } = new();
         public string? ScrapedPricesJson { get; set; }
 
 
@@ -30,6 +32,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
             {
                 ScrapedPricesJson = System.IO.File.ReadAllText(filePath);
             }
+            Houses = _service.GetAllHouses();
         }
 
 
@@ -37,11 +40,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
             {
                 if (!ModelState.IsValid)
                 {
+                    // reload supporting data for the form
+                    var filePath = Path.Combine(_env.ContentRootPath, "Scripts", "latest_prices.json");
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        ScrapedPricesJson = System.IO.File.ReadAllText(filePath);
+                    }
+                    Houses = _service.GetAllHouses();
                     return Page();
                 }
 
                 NewSubscription.Status = "Activa";
 
+                // Simply add the subscription; houses must be created in the Houses page
                 _service.AddSubscription(NewSubscription);
 
                 return RedirectToPage("Index");
