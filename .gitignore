@@ -416,3 +416,5 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+/proyecto/app.db-shm
+/proyecto/app.db-wal
