@@ -31,7 +31,7 @@
                 @foreach (var p in Model.Payments)
                 {
                     <tr>
-                        <td class="p-2">@p.Date.ToShortDateString()</td>
+                        <td class="p-2">@p.Date.ToString("dd/MM/yyyy")</td>
                         <td class="p-2">@p.Amount.ToString("C2")</td>
                         <td class="p-2">@Model.Subscription?.Periodo</td>
                         <td class="p-2">@Model.Subscription?.Description</td>

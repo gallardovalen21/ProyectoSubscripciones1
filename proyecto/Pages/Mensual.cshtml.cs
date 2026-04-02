@@ -27,8 +27,9 @@ namespace proyecto.Pages
         public List<House> Houses { get; set; } = new();
 
         public string MesNombre =>
+            // represent the month as the first day in DD/MM/YYYY format
             new DateTime(Year, Month, 1)
-                .ToString("MMMM yyyy", new CultureInfo("es-ES"));
+                .ToString("dd/MM/yyyy");
 
         // Navigation helpers used by the view
         public int PrevYear => Month == 1 ? Year - 1 : Year;

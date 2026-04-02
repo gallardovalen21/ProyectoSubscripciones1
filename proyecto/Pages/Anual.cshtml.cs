@@ -62,7 +62,7 @@ namespace proyecto.Pages
 
             Meses = Enumerable.Range(1, 12)
                 .Select(m => new DateTime(Year, m, 1)
-                    .ToString("MMM", new CultureInfo("es-ES")))
+                    .ToString("dd/MM/yyyy", new CultureInfo("es-ES")))
                 .ToList();
 
             var suscripciones = datos

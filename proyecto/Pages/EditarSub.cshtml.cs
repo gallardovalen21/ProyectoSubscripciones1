@@ -14,6 +14,9 @@ namespace proyecto.Pages
         [BindProperty]
         public Subscription SubscriptionToEdit { get; set; } = new();
 
+        [BindProperty]
+        public string? NextBillingDateString { get; set; }
+
         public List<House> Houses { get; set; } = new();
 
         public IActionResult OnGet(int id)
@@ -25,6 +28,7 @@ namespace proyecto.Pages
 
             SubscriptionToEdit = sub;
             Houses = _service.GetAllHouses();
+            NextBillingDateString = SubscriptionToEdit.NextBillingDate.ToString("dd/MM/yyyy");
             return Page();
         }
 
@@ -34,6 +38,14 @@ namespace proyecto.Pages
             {
                 Houses = _service.GetAllHouses();
                 return Page();
+            }
+
+            if (!string.IsNullOrWhiteSpace(NextBillingDateString))
+            {
+                if (DateTime.TryParseExact(NextBillingDateString, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var parsed))
+                {
+                    SubscriptionToEdit.NextBillingDate = parsed;
+                }
             }
 
             _service.UpdateSubscription(SubscriptionToEdit);
